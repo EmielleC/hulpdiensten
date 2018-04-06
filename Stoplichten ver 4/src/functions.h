@@ -2,7 +2,9 @@
 #ifndef FUNCTIONS_H_INCLUDED
 #define FUNCTIONS_H_INCLUDED
 
-Hallo geen crash
+char decodeProtocol(char *completedString);
+
+void addCharacter(char input, char *completedString);
 
 void changeTrafficLight(int id, int state);
 

@@ -10,26 +10,61 @@ char recieveCharacter();
   int difference = 0;
   int indexFilled = 0;
   char String[63];
-  char CompletedString[63];
+
+
+char decodeProtocol(char completedString[]){
+    char toReturn2 = '0';
+    bool phrase1s = true;
+    bool phrase2s = true;
+    char phrase1[63] = {'M', 'O', 'D', 'E'};
+    char phrase2[63] = {'N', 'O', 'R', 'M', 'A', 'L'};
+    for (int i = 0; i < 63; i++) {
+
+      if (completedString[i] == '(') {
+        break;
+        }
+
+  if( completedString[i] != phrase1[i]){
+    phrase1s = false;
+  }
+
+  if( completedString[i] != phrase2[i]){
+    phrase2s = false;
+  }
+
+
+}
+
+  if(phrase1s){
+    toReturn2 =  completedString[5];
+  }
+
+  if(phrase2s){
+    toReturn2 = '0';
+  }
+
+return toReturn2;
+}
 
 //zodra bericht compleet is wordt de bool true anders is die false
 //berichten beginnen met # en eindigen met %
-char addCharacter[](char input){
-
+void addCharacter(char input, char *completedString){
   if(input == '#'){
     indexFilled = 0;
+    for (int i = 0; i < 63; i++) {
+          String[i] = 0;
   }
-
+}
   else if(input == '%'){
-    for (i = 0; i < 63; i++) {
-          CompletedString[i] = String[i];
+
+    for (int i = 0; i < 63; i++) {
+          *(completedString + i) = String[i];
        }
   }
   else{
     String[indexFilled] = input;
+    indexFilled++;
   }
-
-  return CompletedString;
 }
 
 int cycleTrafficLights(){

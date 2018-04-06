@@ -7,6 +7,7 @@ char ssid[] = "Emiel";      // your network SSID (name)
 char pass[] = "12345678";   // your network password
 int keyIndex = 0;                 // your network key Index number (needed only for WEP)
 
+
 int status = WL_IDLE_STATUS;
 
 WiFiServer server(8888);
@@ -36,6 +37,7 @@ void setup() {
 
     //Initialize serial and wait for port to open:
     Serial.begin(9600);
+
     while (!Serial) {
       ; // wait for serial port to connect. Needed for Leonardo only
     }
@@ -67,10 +69,12 @@ int mode = 0;
 bool override = false;
 int direction = 0;
 char c = '0';
+char CompletedString[63];
 
 
 
 void loop() {
+
   // listen for incoming clients
   WiFiClient client = server.available();
   if (client) {
@@ -80,15 +84,14 @@ void loop() {
   //  char mess[] = {};
     while (client.connected()) {
 
-      if (client.available() > 0) {
-        c = client.read();
+      if (client.available()) {
+        //c = client.read();
+        addCharacter(client.read(),  CompletedString);
       }
+      c = decodeProtocol(CompletedString);
 
 
-        if(c == '#')
-        {
-          Serial.println("");
-        }
+
         if(c == '1'){
           override = true;
           trafficLightMode(1);
@@ -111,6 +114,7 @@ void loop() {
           trafficLightMode(mode);
         }
 
+        Serial.write(CompletedString[0]);
         Serial.write(c);
 
       }
@@ -120,7 +124,12 @@ void loop() {
     client.stop();
     Serial.println("client disonnected");
   }
-
+/*
+Serial.write("test");
+char phrase1[63] = {'N', 'O', 'R', 'M','A', 'L', '('};
+c = decodeProtocol(phrase1);
+Serial.write(c);
+*/
 }
 
 
