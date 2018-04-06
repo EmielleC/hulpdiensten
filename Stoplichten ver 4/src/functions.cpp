@@ -8,7 +8,30 @@ char recieveCharacter();
   int toReturn = 1;
   int lastSwitch = millis();
   int difference = 0;
-  
+  int indexFilled = 0;
+  char String[63];
+  char CompletedString[63];
+
+//zodra bericht compleet is wordt de bool true anders is die false
+//berichten beginnen met # en eindigen met %
+char addCharacter[](char input){
+
+  if(input == '#'){
+    indexFilled = 0;
+  }
+
+  else if(input == '%'){
+    for (i = 0; i < 63; i++) {
+          CompletedString[i] = String[i];
+       }
+  }
+  else{
+    String[indexFilled] = input;
+  }
+
+  return CompletedString;
+}
+
 int cycleTrafficLights(){
 
   int timeNow = millis();
