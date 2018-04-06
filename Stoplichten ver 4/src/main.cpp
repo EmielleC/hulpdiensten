@@ -76,6 +76,8 @@ char CompletedString[63];
 void loop() {
 
   // listen for incoming clients
+
+  if(server.available()){
   WiFiClient client = server.available();
   if (client) {
     Serial.println("new client");
@@ -93,43 +95,47 @@ void loop() {
 
 
         if(c == '1'){
-          override = true;
           trafficLightMode(1);
         }
-        if(c == '2'){
-          override = true;
+        else if(c == '2'){
           trafficLightMode(3);
         }
-        if(c == '3'){
-          override = true;
+        else if(c == '3'){
           trafficLightMode(5);
         }
-        if(c == '4'){
-          override = true;
+        else if(c == '4'){
           trafficLightMode(7);
         }
-        if(c == '0'){
-          override = false;
+      /*  else if(c == '0'){
+          int mode = cycleTrafficLights();
+          trafficLightMode(mode);
+        }  */
+        else{
           int mode = cycleTrafficLights();
           trafficLightMode(mode);
         }
 
         Serial.write(CompletedString[0]);
         Serial.write(c);
-
+  Serial.println("4");
       }
     // give the web browser time to receive the data
     delay(1);
     // close the connection:
-    client.stop();
     Serial.println("client disonnected");
+      //client.stop();
+      int mode = cycleTrafficLights();
+      trafficLightMode(mode);
+        Serial.println("3");
   }
-/*
-Serial.write("test");
-char phrase1[63] = {'N', 'O', 'R', 'M','A', 'L', '('};
-c = decodeProtocol(phrase1);
-Serial.write(c);
-*/
+
+Serial.println("2");
+
+  }
+  
+  int mode = cycleTrafficLights();
+  trafficLightMode(mode);
+
 }
 
 
