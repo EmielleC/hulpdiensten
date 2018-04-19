@@ -10,6 +10,47 @@ char recieveCharacter();
   int difference = 0;
   int indexFilled = 0;
   char String[63];
+  long timeTillSwitch = 0;
+  int tempMode = 0;
+
+void changeToReturn(int mode){
+  toReturn = mode;
+};
+
+void emergencyMode(int mode){
+
+  if(mode == tempMode){
+    trafficLightMode(mode);
+    Serial.println("1");
+    toReturn = tempMode;
+  }
+  else if(tempMode == 1 || tempMode == 3 || tempMode == 5 || tempMode ==7){
+    Serial.println("2");
+    long temp5 = millis();
+    if(timeTillSwitch == 0){
+      trafficLightMode(tempMode + 1);
+      timeTillSwitch = millis() + 2000;
+
+    }
+    else if(timeTillSwitch < temp5){
+      tempMode = tempMode + 1;
+      trafficLightMode(tempMode);
+      timeTillSwitch = 0;
+  }
+}
+else {
+  Serial.println("3");
+  long temp5 = millis();
+  if(timeTillSwitch == 0){
+    timeTillSwitch = millis() + 2000;
+  }
+  else if(timeTillSwitch < temp5){
+    tempMode = mode;
+    trafficLightMode(tempMode);
+    timeTillSwitch = 0;
+}
+}
+}
 
 
 char decodeProtocol(char completedString[]){
@@ -31,8 +72,6 @@ char decodeProtocol(char completedString[]){
   if( completedString[i] != phrase2[i]){
     phrase2s = false;
   }
-
-
 }
 
   if(phrase1s){
@@ -67,15 +106,18 @@ void addCharacter(char input, char *completedString){
   }
 }
 
+long nextSwitch = 0 ;
+
 int cycleTrafficLights(){
 
-  int timeNow = millis();
-timeNow = timeNow - difference;
+  long timeNow = millis();
 
-  if(lastSwitch < timeNow){
+
+
+
+  if(nextSwitch <= timeNow){
     toReturn = toReturn + 1;
-    difference =  difference + 2000;
-    lastSwitch = timeNow;
+    nextSwitch = timeNow + 2000;
   }
   if( toReturn == 9){
     toReturn = 1;
@@ -85,6 +127,7 @@ return toReturn;
 }
 
 void trafficLightMode(int mode){
+  tempMode = mode;
   switch(mode){
     case 1:
       changeTrafficLight(1,1);

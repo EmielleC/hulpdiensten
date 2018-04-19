@@ -3,8 +3,8 @@
 #include <SPI.h>
 #include <WiFi.h>
 
-char ssid[] = "Emiel";      // your network SSID (name)
-char pass[] = "12345678";   // your network password
+char ssid[] = "smart ambulance";      // your network SSID (name)
+char pass[] = "test123!";   // your network password
 int keyIndex = 0;                 // your network key Index number (needed only for WEP)
 
 
@@ -63,6 +63,9 @@ void setup() {
     // you're connected now, so print out the status:
     printWifiStatus();
 
+
+trafficLightMode(1);
+changeToReturn(1);
 }
 
 int mode = 0;
@@ -76,15 +79,23 @@ char CompletedString[63];
 void loop() {
 
   // listen for incoming clients
-
+Serial.print("a");
+int mode = cycleTrafficLights();
+Serial.println(mode);
+trafficLightMode(mode);
   if(server.available()){
+    Serial.println("b");
   WiFiClient client = server.available();
+  Serial.println("c");
   if (client) {
+    Serial.println("d");
     Serial.println("new client");
+    Serial.println("e");
     // an http request ends with a blank line
 
-  //  char mess[] = {};
+
     while (client.connected()) {
+      //Serial.println("2");
 
       if (client.available()) {
         //c = client.read();
@@ -93,48 +104,50 @@ void loop() {
       c = decodeProtocol(CompletedString);
 
 
-
+      int mode;
         if(c == '1'){
-          trafficLightMode(1);
+          emergencyMode(1);
+
         }
         else if(c == '2'){
-          trafficLightMode(3);
+          emergencyMode(3);
+
         }
         else if(c == '3'){
-          trafficLightMode(5);
+          emergencyMode(5);
+
         }
         else if(c == '4'){
-          trafficLightMode(7);
+          emergencyMode(7);
+
         }
-      /*  else if(c == '0'){
-          int mode = cycleTrafficLights();
+      else if(c == '0'){
+          mode = cycleTrafficLights();
           trafficLightMode(mode);
-        }  */
+        }
         else{
-          int mode = cycleTrafficLights();
+          mode = cycleTrafficLights();
           trafficLightMode(mode);
         }
 
-        Serial.write(CompletedString[0]);
-        Serial.write(c);
-  Serial.println("4");
+        //Serial.write(CompletedString[0]);
+        //Serial.write(c);
+  //Serial.println("4");
       }
     // give the web browser time to receive the data
     delay(1);
     // close the connection:
     Serial.println("client disonnected");
       //client.stop();
-      int mode = cycleTrafficLights();
-      trafficLightMode(mode);
+
         Serial.println("3");
   }
-
+client.stop();
 Serial.println("2");
 
   }
-  
-  int mode = cycleTrafficLights();
-  trafficLightMode(mode);
+
+
 
 }
 

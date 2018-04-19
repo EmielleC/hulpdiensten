@@ -14,4 +14,8 @@ int cycleTrafficLights();
 
 void trafficLightMode(int mode);
 
+void changeToReturn(int mode);
+
+void emergencyMode(int mode);
+
 #endif
